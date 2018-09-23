@@ -10,6 +10,7 @@ def checkPhoneNumber(phone_number):
     if phoneNumber.count('(') == phoneNumber.count(')'):
         correctPhoneNumber = []
         isLastMinus = False
+
         for symbol in phoneNumber:
             if symbol.isdigit():
                 correctPhoneNumber.append(symbol)
@@ -21,6 +22,7 @@ def checkPhoneNumber(phone_number):
                 continue
             else:
                 return 'error'
+
         return '+7' + ''.join(correctPhoneNumber)
     else:
         return 'error'
