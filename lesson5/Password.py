@@ -90,6 +90,6 @@ def check_password(password):
 
 
 try:
-    check_password('FсЫнпblIhЩШY2Е9Пг2Qhjk')
+    check_password(input())
 except LetterError or LengthError or SequenceError or DigitError:
     print('error')
