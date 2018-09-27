@@ -2,21 +2,13 @@ class UncorrectedPhoneNumber(Exception):
     pass
 
 
-class UncorrectedLength(Exception):
-    pass
-
-
-class NonExistentOperator(Exception):
-    pass
-
-
 def main():
     def checkOperatorCodes(number):
         cod = []
         _ = 0
         while len(cod) < 3:
-            _ += 1
             symbol = number[_]
+            _ += 1
             if symbol.isdigit():
                 cod.append(symbol)
 
@@ -44,11 +36,14 @@ def main():
                 if symbol.isdigit():
                     correctPhoneNumber.append(symbol)
                     isLastMinus = False
+
                 elif symbol == '-' and not isLastMinus:
                     isLastMinus = True
                     continue
+
                 elif symbol == '(' or symbol == ')':
                     continue
+
                 else:
                     raise UncorrectedPhoneNumber
 
