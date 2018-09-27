@@ -1,40 +1,80 @@
-def checkPhoneNumber(phone_number):
-    phoneNumber = ''.join(phone_number.split())
-    if phoneNumber[0] == '8':
-        phoneNumber = phoneNumber[1:]
+class UncorrectedPhoneNumber(Exception):
+    pass
 
-    elif phoneNumber[0] == '+' and phoneNumber[1] == '7':
-        phoneNumber = phoneNumber[2:]
 
-    else:
-        return 'error'
+class UncorrectedLength(Exception):
+    pass
 
-    openCount, closeCount = phoneNumber.count('('), phoneNumber.count(')')
 
-    if openCount == closeCount and (openCount == 1 or closeCount == 0):
-        correctPhoneNumber = []
-        isLastMinus = False
+class NonExistentOperator(Exception):
+    pass
 
-        for symbol in phoneNumber:
+
+def main():
+    def checkOperatorCodes(number):
+        cod = []
+        _ = 0
+        while len(cod) < 3:
+            _ += 1
+            symbol = number[_]
             if symbol.isdigit():
-                correctPhoneNumber.append(symbol)
-                isLastMinus = False
+                cod.append(symbol)
 
-            elif symbol == '-' and not isLastMinus:
-                isLastMinus = True
-                continue
+        cod = int(''.join(cod))
+        return 901 < cod < 907 or 909 < cod < 940 or 959 < cod < 970 or 979 < cod < 990
 
-            elif symbol == '(' or symbol == ')':
-                continue
+    def checkPhoneNumber(phone_number):
+        phoneNumber = ''.join(phone_number.split())
+        if phoneNumber[0] == '8':
+            phoneNumber = phoneNumber[1:]
 
+        elif phoneNumber[0] == '+' and phoneNumber[1] == '7':
+            phoneNumber = phoneNumber[2:]
+
+        else:
+            raise UncorrectedPhoneNumber
+
+        openCount, closeCount = phoneNumber.count('('), phoneNumber.count(')')
+
+        if openCount == closeCount and (openCount == 1 or closeCount == 0):
+            correctPhoneNumber = []
+            isLastMinus = False
+
+            for symbol in phoneNumber:
+                if symbol.isdigit():
+                    correctPhoneNumber.append(symbol)
+                    isLastMinus = False
+                elif symbol == '-' and not isLastMinus:
+                    isLastMinus = True
+                    continue
+                elif symbol == '(' or symbol == ')':
+                    continue
+                else:
+                    raise UncorrectedPhoneNumber
+
+            if not isLastMinus:
+                if len(correctPhoneNumber) != 10:
+                    raise UncorrectedLength
+
+                if not checkOperatorCodes(phoneNumber):
+                    raise NonExistentOperator
+
+                return '+7' + ''.join(correctPhoneNumber)
             else:
-                return 'error'
+                raise UncorrectedPhoneNumber
+        else:
+            raise UncorrectedPhoneNumber
 
-        return '+7' + ''.join(correctPhoneNumber) \
-            if not isLastMinus and len(correctPhoneNumber) == 10 else 'error'
+    try:
+        print(checkPhoneNumber(input()))
+    except UncorrectedPhoneNumber:
+        print('неверный формат')
 
-    else:
-        return 'error'
+    except UncorrectedLength:
+        print('неверное количество цифр')
+
+    except NonExistentOperator:
+        print('не определяется оператор сотовой связи')
 
 
-print(checkPhoneNumber(input()))
+main()
