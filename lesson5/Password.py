@@ -60,7 +60,7 @@ def checkTrio(parole: str):
 
 
 def check_password(password):
-    if len(password) >= 8:
+    if len(password) > 8:
         isUpper, isLower, isDigit = False, False, False
 
         for letter in password:
@@ -83,13 +83,7 @@ def check_password(password):
             raise SequenceError
 
         else:
-            print('ok')
+            return 'ok'
 
     else:
         raise LengthError
-
-
-try:
-    check_password(input())
-except LetterError or LengthError or SequenceError or DigitError:
-    print('error')
