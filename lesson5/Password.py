@@ -1,35 +1,20 @@
-class PasswordError(Exception):
-    pass
-
-
-class LengthError(PasswordError):
-    pass
-
-
-class LetterError(PasswordError):
-    pass
-
-
-class DigitError(PasswordError):
-    pass
-
-
-class SequenceError(PasswordError):
-    pass
-
-
 def checkTrio(parole: str):
     for indexOfLetter in range(1, len(parole) - 1):
-        eng = 'qwertyuiopasdfghjklzxcvbnm------'
-        rus = 'йцукенгшщзхъфывапролджэячсмитьбю'
+        eng = "qwertyuiop[] asdfghjkl;' zxcvbnm,./"
+        rus = 'йцукенгшщзхъ фывапролджэ ячсмитьбю'
+        digits = '1234567890-='
         preferLetter = parole[indexOfLetter - 1]
         letter = parole[indexOfLetter]
         nextLetter = parole[indexOfLetter + 1]
         indexOfLetter = 0
         indexOfNextLetter = 0
         indexOfPreferLetter = 0
+        if preferLetter.isdigit() and letter.isdigit() and nextLetter.isdigit():
+            indexOfPreferLetter = digits.find(preferLetter)
+            indexOfLetter = digits.find(letter)
+            indexOfNextLetter = digits.find(nextLetter)
 
-        if preferLetter.isdigit() or nextLetter.isdigit() or letter.isdigit():
+        elif not preferLetter.isalpha() or not nextLetter.isalpha() or not letter.isalpha():
             continue
 
         if 'ё' == preferLetter:
@@ -59,31 +44,73 @@ def checkTrio(parole: str):
     return True
 
 
-def check_password(password):
-    if len(password) > 8:
-        isUpper, isLower, isDigit = False, False, False
-
-        for letter in password:
-            if letter.isdigit():
-                isDigit = True
-
-            elif letter.isupper():
-                isUpper = True
-
-            elif letter.islower():
-                isLower = True
-
-        if not isDigit:
-            raise DigitError
-
-        elif not isUpper or not isLower:
-            raise LetterError
-
-        elif not checkTrio(password.lower()):
-            raise SequenceError
-
-        else:
-            return 'ok'
-
+def checkWord(parole: str):
+    words = open("top-9999-words.txt").read().split()
+    for word in words:
+        if word in parole:
+            return True
     else:
-        raise LengthError
+        return False
+
+
+def check_password(password):
+    errors = []
+    if len(password) > 8:
+        errors.append('LengthError')
+    isUpper, isLower, isDigit = False, False, False
+
+    for letter in password:
+        if letter.isdigit():
+            isDigit = True
+
+        elif letter.isupper():
+            isUpper = True
+
+        elif letter.islower():
+            isLower = True
+
+    if not isDigit:
+        errors.append('DigitError')
+
+    if not isUpper or not isLower:
+        errors.append('LetterError')
+
+    if not checkTrio(password.lower()):
+        errors.append('SequenceError')
+
+    if not checkWord(password.lower()):
+        errors.append('WordError')
+
+    return errors
+
+
+exceptions = {'LengthError': 0,
+              'DigitError': 0,
+              'LetterError': 0,
+              'SequenceError': 0,
+              'WordError': 0}  # NameOfError : number
+# while True:
+passwords = open('top 10000 passwd.txt').read().split()
+
+for text in passwords:
+    try:
+        global errors
+        # text = input()
+        if text == 'Ctrl+Break':
+            raise KeyboardInterrupt
+
+        errors = check_password(text)
+        assert not errors
+
+    except AssertionError:
+        for error in errors:
+            exceptions[error] += 1
+
+    except KeyboardInterrupt:
+        print('Bye-Bye')
+
+        for exception in exceptions.keys():
+            print(exception, exceptions[exception], sep=' = ')
+
+for exception in exceptions.keys():
+    print(exception, exceptions[exception], sep=' = ')
