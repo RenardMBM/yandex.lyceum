@@ -6,5 +6,6 @@ count = [1 if float(number) > 0 else -1 if float(number) < 0 else 0
 
 count = Counter(count)
 newFile = open('output.txt', 'w')
+print(len(count), file=newFile)
 print(*[str(_) + ' ' + str(count[_]) for _ in [1, -1, 0] if count[_]], file=newFile)
 newFile.close()
