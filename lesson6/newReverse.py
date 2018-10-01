@@ -1,7 +1,12 @@
 def reverse():
-    file = open('input.dat', 'rb').read().split()
+    file = open('input.dat', 'rb').read()
     newFile = open('output.dat', 'wb')
-    a = [i for _ in file for i in _][::-1]
+    print(file)
+    # a = []
+    # for _ in file:
+    #     a.append(_)
+    #     print(_)
+    a = [_ for _ in file][::-1]
     newFile.write(bytes(a))
     newFile.close()
 
