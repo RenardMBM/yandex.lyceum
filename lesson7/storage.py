@@ -13,6 +13,8 @@ with open('wares.csv', encoding='utf8') as csvFile:
     correctsGoods = [_[0] for _ in goods.items() if _[1] <= 1000]
 
     if correctsGoods:
-        print(*[item for item in sorted(goods, key=lambda x: (goods[x], x)) if item in correctsGoods])
+        print(*[item for item in sorted(goods, key=lambda x: (goods[x], x))
+                if item in correctsGoods])
+
     else:
         print('error')
