@@ -12,12 +12,14 @@ with open('wares.csv', encoding='utf8') as csvFile:
 
     correctsGoods = sorted([_[0] for _ in goods.items() if _[1] <= 1000], key=lambda x: goods[x])
     outGoods = []
+    balance = 1000
 
     if correctsGoods:
 
         for item in correctsGoods:
-            n = 1000 // goods[item] if 1000 // goods[item] < 11 else 10
+            n = balance // goods[item] if balance // goods[item] < 11 else 10
             outGoods += [item] * n
+            balance -= goods[item] * n
 
         print(*outGoods, sep=', ')
 
