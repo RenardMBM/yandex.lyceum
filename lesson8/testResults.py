@@ -2,18 +2,29 @@ from json import load
 
 with open('scoring.json') as file:
     tests = load(file)['scoring']
-
     costOfTests = dict()
 
     for test in tests:
-        print(test)
-        for testNumber in test['required_tests']:
-            costOfTests[str(testNumber)] = test['points']
+        costOfTests[','.join([str(n) for n in test['required_tests']])] = int(test['points'])
+    answers = [key for groupOfKeys in costOfTests.keys()
+               for key in groupOfKeys.split(',')
+               if input() == 'ok']
 
     total = 0
 
-    for k in [key for key in costOfTests.keys()]:
-        total += costOfTests[k] if input() == 'ok' else 0
+    for groupOfTests in costOfTests.keys():
+        result = True
 
-    print(costOfTests)
+        for testName in groupOfTests.split(','):
+
+            if testName in answers:
+                continue
+
+            else:
+                result = False
+                break
+
+        if result:
+            total += costOfTests[groupOfTests]
+
     print(total)
