@@ -14,14 +14,14 @@ def test_zero():
     instance = Rectangle(0, 1)
 
     assert not instance.get_area()
-    assert instance.get_perimeter == 1
+    assert instance.get_perimeter() == 2
 
 
 def test_type_float():
     instance = Rectangle(0.1, 0.9)
 
     assert instance.get_area() == 0.09000000000000001
-    assert instance.get_perimeter == 2
+    assert instance.get_perimeter() == 2
 
 
 def test_wrong_type_str():

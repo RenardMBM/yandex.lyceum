@@ -12,15 +12,22 @@ class Cell:
         self.mode = 0  # 0 - close; 1 - open; 2 - flag; 3 - question
         self.numberOfBombNear = 0
         self.nameImage = 'closed_cell.png'
+        self.isCheck = False
 
     def __str__(self):
-        return '(' + str(self.x) + ' ' + str(self.y) + ')'
+        return '(' + ' '.join([str(self.x), str(self.y),
+                               str(self.isBomb), str(self.mode),
+                               str(self.numberOfBombNear), str(self.numberOfBombNear), self.nameImage, str(self.isCheck)
+                               ]) + ')'
 
     def drawCell(self):
         from sapper import sc
 
         if not self.mode:
             self.nameImage = 'closed_cell.png'
+
+        elif self.isBomb and self.mode == 1:
+            self.nameImage = 'bomb.png'
 
         elif self.mode == 1:
             self.nameImage = str(self.numberOfBombNear) + '.png'
@@ -29,7 +36,7 @@ class Cell:
             self.nameImage = 'labeled_cell.png'
 
         elif self.mode == 3:
-            self.nameImage = 'cel_in_question.png'
+            self.nameImage = 'cell_in_question.png'
 
         else:
             raise WrongMode('check cell.py')
