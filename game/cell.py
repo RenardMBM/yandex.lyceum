@@ -1,4 +1,5 @@
 import pygame
+from __main__ import sc
 
 
 class WrongMode(Exception):
@@ -21,7 +22,6 @@ class Cell:
                                ]) + ')'
 
     def drawCell(self):
-        from __main__ import sc
 
         if not self.mode:
             self.nameImage = 'closed_cell.png'
@@ -47,7 +47,6 @@ class Cell:
         sc.blit(cell_surf, cell_rect)
 
     def drawBrightCell(self):
-        from __main__ import sc
 
         bright_cell_surf = pygame.image.load('images/bright_' + self.nameImage)
         bright_cell_rect = bright_cell_surf.get_rect(bottomright=(self.x, self.y))

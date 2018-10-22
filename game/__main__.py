@@ -3,6 +3,7 @@ from random import randint
 from settings import *
 from cell import Cell
 from PIL import Image
+from button import Button
 
 
 def cellSearchByCoordinate(x, y):
@@ -143,14 +144,22 @@ isMenuOn = True
 isFirstPress = True
 isGameOver = False
 isWin = False
+isGame = False
 
 clock = pygame.time.Clock()
 sc = pygame.display.set_mode((BACKGROUND_SIZE_X, BACKGROUND_SIZE_Y))
 
 pygame.display.set_caption('Сапер')
 img = Image.open('images/backgroundGameOver.png')
-resized_img = img.resize((BACKGROUND_SIZE_X, BACKGROUND_SIZE_Y), Image.ANTIALIAS)
-resized_img.save('images/resizeBackgroundGameOver.png')
+resize_img = img.resize((BACKGROUND_SIZE_X, BACKGROUND_SIZE_Y), Image.ANTIALIAS)
+resize_img.save('images/resizeBackgroundGameOver.png')
+
+img = Image.open('image/backgroundMenu.jpg')
+resize_img = img.resize((BACKGROUND_SIZE_X, BACKGROUND_SIZE_Y), Image.ANTIALIAS)
+resize_img.save('images/resizeBackgroundMenu.jpg')
+
+backgroundMenu_surf = pygame.image.load('image/resizeBackgroundMenu.jpg')
+backgroundMenu_rect = backgroundMenu_surf.get_rect(bottomright=(BACKGROUND_SIZE_X, BACKGROUND_SIZE_Y))
 
 background_surf = pygame.image.load('images/background.jpg')
 background_rect = background_surf.get_rect(bottomright=(BACKGROUND_SIZE_X, BACKGROUND_SIZE_Y))
@@ -163,6 +172,11 @@ gameOver_rect = gameOver_surf.get_rect(bottomright=(GAME_OVER_X, GAME_OVER_Y))
 
 win_surf = pygame.image.load('images/win.png')
 win_rect = win_surf.get_rect(bottomright=(GAME_OVER_X, GAME_OVER_Y))
+
+buttonContinue = Button(100, 100, 'buttonContinue.png')
+buttonNewGame = Button(100, 200, 'buttonNewGame.png')
+buttonSetting = Button(100, 300, 'buttonSetting.png')
+buttonExit = Button(100, 400, 'buttonExit.png')
 
 coordinateOfFlags = []
 coordinateOfBombs = []
@@ -198,11 +212,19 @@ while isOn:
 
                 if event.key == pygame.K_r:
                     restartGame()
+
+                elif event.key == pygame.K_ESCAPE:
+                    isMenuOn = True
     # if isMenuOn:
     elif not isMenuOn:
-        menu_surf = pygame.image.load('images/menu.png')
-        menu_rect = menu_surf.get_rect(bottomright=(MAP_SIZE_X + OFFSET_FROM_EDGE, MAP_SIZE_Y + OFFSET_FROM_EDGE))
-        sc.blit(menu_surf, menu_rect)
+        sc.blit(background_surf, background_rect)
+
+        if isGameOver:
+            buttonContinue.drawButton()
+
+        buttonNewGame.drawButton()
+        buttonSetting.drawButton()
+        buttonExit.drawButton()
 
     else:
 
